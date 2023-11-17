@@ -6,8 +6,9 @@ class ListsController < ApplicationController
   end
 
   def show
+    @list = List.find(params[:id])
     @bookmark = Bookmark.new
-    @review = Review.new(list: @list)
+
   end
 
   def new
@@ -17,7 +18,7 @@ class ListsController < ApplicationController
   def create
     @list = List.new(list_params)
     if @list.save
-    redirect_to list_path(@list)
+      redirect_to list_path(@list), notice: "List successfully updated"
     else
       render :new, status: :unprocessable_entity
     end
@@ -25,7 +26,7 @@ class ListsController < ApplicationController
 
   def destroy
     @list.destroy
-    redirect_to lists_path, status: :see_other
+    redirect_to root_path, status: :see_other
   end
 
   private
@@ -35,6 +36,6 @@ class ListsController < ApplicationController
   end
 
   def list_params
-    params.require(:list).permit(:name)
+    params.require(:list).permit(:name, :photo)
   end
 end
